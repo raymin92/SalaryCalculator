@@ -9,21 +9,31 @@ namespace SalaryCalculator.Application.Report
     {
         public void PrintSalaryDetails(Salary salary)
         {
-            Console.WriteLine();
-            Console.WriteLine("Calculating salary details...");
-            Console.WriteLine();
-            Console.WriteLine($"Gross package: {salary.GrossPackage.ToString("C", CultureInfo.CurrentCulture)}");
-            Console.WriteLine($"Superannuation: {salary.Superannuation.ToString("C", CultureInfo.CurrentCulture)}");
-            Console.WriteLine();
-            Console.WriteLine($"Taxable income: {salary.TaxableIncome.ToString("C", CultureInfo.CurrentCulture)}");
-            Console.WriteLine();
-            Console.WriteLine("Deductions:");
-            Console.WriteLine($"Medicare Levy: {salary.Deduction.MedicareLevy.Value.ToString("C", CultureInfo.CurrentCulture)}");
-            Console.WriteLine($"Budget Repair Levy: {salary.Deduction.BudgetRepairLevy.Value.ToString("C", CultureInfo.CurrentCulture)}");
-            Console.WriteLine($"Income Tax: {salary.Deduction.IncomeTax.Value.ToString("C", CultureInfo.CurrentCulture)}");
-            Console.WriteLine();
-            Console.WriteLine($"Net income: {salary.NetIncome.ToString("C", CultureInfo.CurrentCulture)}");
-            Console.WriteLine($"Pay packet: {salary.PayPacket.ToString("C", CultureInfo.CurrentCulture)} per {salary.PayFrequency.GetDisplayName()}");
+            Console.WriteLine(GetReportString(salary));
+        }
+
+        private string GetReportString(Salary salary)
+        {
+            return $@"
+Calculating salary details...
+
+Gross package: {ToCurrency(salary.GrossPackage)}
+Superannuation: {ToCurrency(salary.Superannuation)}
+
+Taxable income: {ToCurrency(salary.TaxableIncome)}
+
+Deductions:
+Medicare Levy: {ToCurrency(salary.Deduction.MedicareLevy.Value)}
+Budget Repair Levy: {ToCurrency(salary.Deduction.BudgetRepairLevy.Value)}
+Income Tax: {ToCurrency(salary.Deduction.IncomeTax.Value)}
+
+Net income: {ToCurrency(salary.NetIncome)}
+Pay packet: {ToCurrency(salary.PayPacket)} per {salary.PayFrequency.GetDisplayName()}";
+        }
+
+        private string ToCurrency(decimal value)
+        {
+            return value.ToString("C", CultureInfo.CurrentCulture);
         }
     }
 }
